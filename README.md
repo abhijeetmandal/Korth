@@ -5,11 +5,13 @@ Database problems and solutions
 
 a. All students who have taken at least one Comp. Sci. course; (distinct)
 
+```SQL
 SELECT student.ID
 FROM student
 where 1 <= (SELECT count(DISTINCT course_id)
            FROM takes NATURAL JOIN course
            WHERE course.dept_name='Comp. Sci.'
            and student.ID=takes.ID);
+```           
            
 b.            
