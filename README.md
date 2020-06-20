@@ -15,3 +15,44 @@ where 1 <= (SELECT count(DISTINCT course_id)
 ```           
            
 b.            
+
+
+d.
+
+```SQL
+SELECT * FROM instructor;
+
+SELECT MAX(salary),dept_name, instructor.name 
+FROM instructor
+GROUP BY dept_name;
+
+WITH max_sal_dept as (SELECT MAX(salary) as max_salary,dept_name
+     FROM instructor
+     GROUP BY dept_name)
+SELECT instructor.salary,instructor.dept_name,instructor.name
+FROM instructor,max_sal_dept
+WHERE instructor.dept_name=max_sal_dept.dept_name
+AND instructor.salary=max_sal_dept.max_salary
+;
+
+WITH max_sal_dept as (SELECT MAX(salary) as max_salary,dept_name
+     FROM instructor
+     GROUP BY dept_name)
+SELECT *
+FROM department,max_sal_dept
+WHERE department.dept_name=max_sal_dept.dept_name
+;
+
+WITH max_sal_dept as (SELECT MAX(salary) as max_salary,dept_name
+     FROM instructor
+     GROUP BY dept_name),max_sal_per_dept as (SELECT department.dept_name,max_sal_dept.max_salary,instructor.name
+												FROM department,max_sal_dept,instructor
+												WHERE department.dept_name=max_sal_dept.dept_name
+												and instructor.dept_name=department.dept_name
+												and instructor.salary=max_sal_dept.max_salary)
+select dept_name,max_salary
+FROM
+max_sal_per_dept
+where max_salary= (select min(max_salary) FROM max_sal_per_dept)
+;
+```
