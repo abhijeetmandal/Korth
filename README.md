@@ -56,3 +56,18 @@ max_sal_per_dept
 where max_salary= (select min(max_salary) FROM max_sal_per_dept)
 ;
 ```
+
+3.12
+
+SELECT student.ID, section.course_id, section.sec_id, section.semester, section.year
+FROM student,section
+WHERE student.dept_name='Comp. Sci.'
+AND section.course_id='CS-001'
+;
+
+INSERT INTO takes (ID,course_id,sec_id,semester,year)
+SELECT student.ID, section.course_id, section.sec_id, section.semester, section.year
+FROM student,section
+WHERE student.dept_name='Comp. Sci.'
+AND section.course_id='CS-001'
+;
