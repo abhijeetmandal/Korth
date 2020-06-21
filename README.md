@@ -59,6 +59,8 @@ where max_salary= (select min(max_salary) FROM max_sal_per_dept)
 
 3.12
 
+```SQL
+
 SELECT student.ID, section.course_id, section.sec_id, section.semester, section.year
 FROM student,section
 WHERE student.dept_name='Comp. Sci.'
@@ -71,3 +73,68 @@ FROM student,section
 WHERE student.dept_name='Comp. Sci.'
 AND section.course_id='CS-001'
 ;
+
+DELETE FROM takes
+WHERE takes.ID in (SELECT student.ID
+FROM student
+WHERE student.name='Chavez');
+
+DELETE FROM
+course
+WHERE course_id='CS-001';
+
+DELETE FROM takes
+WHERE (takes.course_id,takes.sec_id,takes.semester,takes.year) =
+(SELECT section.course_id,section.sec_id,section.semester,section.year
+FROM course NATURAL JOIN section
+WHERE lower(title) like '%database%');
+
+
+CREATE TABLE person
+		(driver_id	varchar(10),
+         name		varchar(20) not null,
+         address	varchar(50),
+         PRIMARY KEY (driver_id)
+         );
+	 
+	 
+CREATE TABLE car
+(license	varchar(10),
+ model		varchar(10),
+ year 		numeric(4,0) check (year>1701 and year<2100),
+ PRIMARY KEY (license)
+);
+
+
+CREATE TABLE accident
+(report_number	varchar(10),
+ date date,
+ location varchar(20),
+ PRIMARY KEY (report_number)
+);
+
+CREATE TABLE owns
+(driver_id	varchar(10),
+ license	varchar(10),
+ PRIMARY KEY (driver_id,license),
+ FOREIGN KEY (driver_id) REFERENCES person(driver_id)
+ 						ON DELETE CASCADE,
+ FOREIGN KEY (license) REFERENCES car(license)
+ 						ON DELETE CASCADE
+)
+
+CREATE TABLE participated
+(report_number	varchar(10),
+ license	varchar(10),
+ driver_id	varchar(10),
+ damage_amount numeric(12,2),
+ PRIMARY KEY (report_number,license),
+ FOREIGN KEY (report_number) REFERENCES accident(report_number)
+ 						ON DELETE CASCADE,
+ FOREIGN KEY (license) REFERENCES car(license)
+ 						ON DELETE CASCADE,
+ FOREIGN KEY (driver_id) REFERENCES person(driver_id)
+ 						ON DELETE SET NULL
+)
+
+```
