@@ -138,3 +138,17 @@ CREATE TABLE participated
 )
 
 ```
+
+4.9
+
+```SQL
+
+CREATE TABLE manager
+	(employee_name varchar(20) not null,
+     manager_name varchar(20) not null,
+     PRIMARY KEY (employee_name),
+     FOREIGN KEY (manager_name) REFERENCES manager(employee_name) 
+     			ON DELETE CASCADE
+    );
+
+```
