@@ -151,4 +151,51 @@ CREATE TABLE manager
      			ON DELETE CASCADE
     );
 
+CREATE TABLE employee
+	(employee_name varchar(20),
+    street varchar(20),
+    city varchar(20),
+    PRIMARY KEY (employee_name)
+    );
+
+CREATE TABLE manages
+	(employee_name varchar(20),
+    manager_name varchar(20),
+    PRIMARY KEY (employee_name),
+    FOREIGN KEY (employee_name) REFERENCES employee(employee_name) ON DELETE CASCADE,
+    FOREIGN KEY (manager_name) REFERENCES employee(employee_name) ON DELETE SET NULL)
+ ;   
+ 
+INSERT INTO employee VALUES ('Emp1', 'Street1', 'City1');
+INSERT INTO employee VALUES ('Emp2', 'Street2', 'City2');
+INSERT INTO employee VALUES ('Emp3', 'Street3', 'City3');
+INSERT INTO employee VALUES ('Emp4', 'Street4', 'City4');
+
+
+SELECT *
+FROM employee;
+
+SELECT *
+FROM manages;
+
+SELECT * 
+FROM manages NATURAL RIGHT OUTER JOIN employee
+where manages.manager_name is NULL;
+
+SELECT * 
+FROM employee
+where employee.employee_name not in (SELECT manages.employee_name
+                                    FROM manages
+                                    WHERE manages.manager_name is NOT NULL and manages.employee_name=employee.employee_name)
+                                    ;
+                                    
+                                    
+SELECT * 
+FROM employee
+where NOT EXISTS (SELECT *
+                  FROM manages
+                  WHERE manages.manager_name is NOT NULL AND manages.employee_name=employee.employee_name)
+                 ;                                    
+		 
+
 ```
